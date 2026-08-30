@@ -86,16 +86,18 @@ const Navbar = () => {
 
             {/* Login */}
             <Link
-              to="/login"
-              className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-all duration-200 hover:border-amber-400 hover:text-amber-600"
+              to="/role-selection"
+              state={{ mode: "login" }}
+              className="rounded-lg border border-gray-200 px-5 py-2.5 text-sm font-medium text-gray-700 transition hover:border-amber-400 hover:text-amber-500"
             >
               Login
             </Link>
 
             {/* Get Started */}
             <Link
-              to="/signup"
-              className="rounded-lg bg-amber-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-amber-600 hover:shadow-md"
+              to="/role-selection"
+              state={{ mode: "signup" }}
+              className="rounded-lg bg-amber-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-600"
             >
               Get Started
             </Link>
