@@ -5,6 +5,14 @@ import Landing from "../pages/Landing/Landing";
 import Login from "../pages/Auth/Login";
 import Signup from "../pages/Auth/Signup";
 import RoleSelection from "../pages/Auth/RoleSelection";
+import BeekeeperDashboard from "../pages/Beekeeper/BeekeeperDashboard";
+import Batches from "../pages/Beekeeper/Batches";
+import RegisterBatch from "../pages/Beekeeper/RegisterBatch";
+import QRManagement from "../pages/Beekeeper/QRManagement";
+import Verification from "../pages/Beekeeper/Verification";
+import BeekeeperSettings from "../pages/Beekeeper/Settings";
+import BeekeeperProfile from "../pages/Beekeeper/Profile";
+import BeekeeperSecurity from "../pages/Beekeeper/Security";
 
 const AppRoutes = () => {
   return (
@@ -18,14 +26,14 @@ const AppRoutes = () => {
       <Route path="/signup" element={<Signup />} />
 
       {/* Temporary dashboard routes */}
-      <Route
+      {/* <Route
         path="/beekeeper/dashboard"
         element={
           <div className="p-10 text-2xl font-bold">
             Beekeeper Dashboard
           </div>
         }
-      />
+      /> */}
 
       <Route
         path="/admin/dashboard"
@@ -44,6 +52,47 @@ const AppRoutes = () => {
           </div>
         }
       />
+      
+      <Route
+        path="/beekeeper/dashboard"
+        element={<BeekeeperDashboard />}
+      />
+
+      <Route
+        path="/beekeeper/batches"
+        element={<Batches />}
+      />
+
+      <Route
+        path="/beekeeper/register"
+        element={<RegisterBatch />}
+      />
+
+      <Route
+        path="/beekeeper/qr-codes"
+        element={<QRManagement />}
+      />
+
+      <Route
+        path="/beekeeper/verification"
+        element={<Verification />}
+      />
+
+      <Route
+        path="/beekeeper/settings"
+        element={<BeekeeperSettings />}
+      />
+
+      <Route
+        path="/beekeeper/profile"
+        element={<BeekeeperProfile />}
+      />
+
+      <Route
+        path="/beekeeper/security"
+        element={<BeekeeperSecurity />}
+      />
+
     </Routes>
   );
 };
