@@ -78,14 +78,16 @@ const Footer = () => {
               </a>
 
               <Link
-                to="/login"
+                to="/role-selection"
+                state={{ mode: "login" }}
                 className="w-fit text-sm text-slate-500 transition-colors duration-200 hover:text-amber-500"
               >
                 Login
               </Link>
 
               <Link
-                to="/signup"
+                to="/role-selection"
+                state={{ mode: "signup" }}
                 className="w-fit text-sm text-slate-500 transition-colors duration-200 hover:text-amber-500"
               >
                 Get Started

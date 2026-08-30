@@ -40,7 +40,8 @@ const CTA = () => {
 
             {/* CTA */}
             <Link
-              to="/signup"
+              to="/role-selection"
+              state={{ mode: "signup" }}
               className="mt-8 inline-flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-3.5 text-sm font-semibold text-amber-600 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-amber-50 hover:shadow-md sm:px-7"
             >
               Join HoneyChain
