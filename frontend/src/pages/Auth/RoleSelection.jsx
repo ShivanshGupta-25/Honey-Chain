@@ -36,10 +36,18 @@ const RoleSelection = () => {
                 alt="HoneyChain"
                 className="h-12 w-auto object-contain"
             />
+            {/* Logo Text */}
+            <div className="leading-none">
+              <h1 className="text-xl font-bold tracking-tight text-slate-900">
+                Honey<span className="text-amber-500">Chain</span>
+              </h1>
 
-            <span>
-              Honey<span className="text-amber-500">Chain</span>
-            </span>
+              <p className="mt-1 text-[12px] font-medium tracking-[0.2em] text-slate-900">
+                Smart, Transparent, and Trustworthy Honey Ecosystem
+              </p>
+            </div>
+
+                
           </Link>
 
           <Link

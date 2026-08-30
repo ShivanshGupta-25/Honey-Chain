@@ -36,9 +36,16 @@ const Login = () => {
                 className="h-12 w-auto object-contain"
             />
 
-            <span className="text-xl font-bold">
-              Honey<span className="text-amber-400">Chain</span>
-            </span>
+            {/* Logo Text */}
+            <div className="leading-none">
+              <h1 className="text-xl font-bold tracking-tight white">
+                Honey<span className="text-amber-500">Chain</span>
+              </h1>
+
+              <p className="mt-1 text-[12px] font-medium tracking-[0.2em] text-white/80">
+                Smart, Transparent, and Trustworthy Honey Ecosystem
+              </p>
+            </div>
           </Link>
 
           <div>
