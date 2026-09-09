@@ -1,4 +1,10 @@
 export const saveAuth = (data) => {
+  if (!data?.token || !data?.user) {
+    throw new Error(
+      "Invalid authentication response"
+    );
+  }
+
   localStorage.setItem(
     "token",
     data.token
@@ -15,13 +21,24 @@ export const getToken = () => {
 };
 
 export const getUser = () => {
-  const user = localStorage.getItem("user");
+  const storedUser =
+    localStorage.getItem("user");
 
-  return user ? JSON.parse(user) : null;
+  if (!storedUser) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(storedUser);
+  } catch {
+    return null;
+  }
 };
 
 export const isAuthenticated = () => {
-  return !!localStorage.getItem("token");
+  return Boolean(
+    localStorage.getItem("token")
+  );
 };
 
 export const logout = () => {

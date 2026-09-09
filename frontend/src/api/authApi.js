@@ -1,11 +1,18 @@
+
 import { api } from "./api";
 
 export const signupUser = async (userData) => {
-  return await api.post("/auth/signup", userData);
+  return await api.post(
+    "/auth/signup",
+    userData
+  );
 };
 
 export const loginUser = async (credentials) => {
-  return await api.post("/auth/login", credentials);
+  return await api.post(
+    "/auth/login",
+    credentials
+  );
 };
 
 export const getCurrentUser = async () => {
