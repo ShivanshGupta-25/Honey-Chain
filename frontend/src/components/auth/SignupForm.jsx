@@ -1,13 +1,9 @@
 import { useState } from "react";
 import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { useAuthContext } from "../../context/AuthContext";
 
-const SignupForm = ({ role }) => {
-  const navigate = useNavigate();
-  const { login } = useAuthContext();
-
+const SignupForm = ({ role, onSubmit }) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -16,40 +12,47 @@ const SignupForm = ({ role }) => {
     confirmPassword: "",
   });
 
+  const [passwordError, setPasswordError] = useState("");
+
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    if (
+      name === "password" ||
+      name === "confirmPassword"
+    ) {
+      setPasswordError("");
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Validate password confirmation
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match.");
+      setPasswordError("Passwords do not match.");
       return;
     }
 
-    // Temporary frontend registration
-    login({
-      id: Date.now(),
+    setPasswordError("");
+
+    // Send data to Signup.jsx
+    onSubmit({
       name: formData.name,
       email: formData.email,
-      role,
+      password: formData.password,
     });
-
-    if (role === "beekeeper") {
-      navigate("/beekeeper/dashboard");
-    } else if (role === "admin") {
-      navigate("/admin/dashboard");
-    } else {
-      navigate("/verify");
-    }
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+
+      {/* Full Name */}
       <div>
         <label className="mb-2 block text-sm font-medium text-gray-700">
           Full Name
@@ -67,12 +70,14 @@ const SignupForm = ({ role }) => {
             value={formData.name}
             onChange={handleChange}
             placeholder="Enter your name"
+            autoComplete="name"
             required
-            className="w-full rounded-xl border border-gray-200 py-3 pl-10 pr-4 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
+            className="w-full rounded-xl border border-gray-200 py-3 pl-10 pr-4 outline-none transition focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
           />
         </div>
       </div>
 
+      {/* Email */}
       <div>
         <label className="mb-2 block text-sm font-medium text-gray-700">
           Email Address
@@ -90,12 +95,14 @@ const SignupForm = ({ role }) => {
             value={formData.email}
             onChange={handleChange}
             placeholder="you@example.com"
+            autoComplete="email"
             required
-            className="w-full rounded-xl border border-gray-200 py-3 pl-10 pr-4 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
+            className="w-full rounded-xl border border-gray-200 py-3 pl-10 pr-4 outline-none transition focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
           />
         </div>
       </div>
 
+      {/* Password */}
       <div>
         <label className="mb-2 block text-sm font-medium text-gray-700">
           Password
@@ -113,37 +120,82 @@ const SignupForm = ({ role }) => {
             value={formData.password}
             onChange={handleChange}
             placeholder="Create a password"
+            autoComplete="new-password"
             required
-            className="w-full rounded-xl border border-gray-200 py-3 pl-10 pr-11 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
+            className="w-full rounded-xl border border-gray-200 py-3 pl-10 pr-11 outline-none transition focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
           />
 
           <button
             type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+            onClick={() =>
+              setShowPassword((prev) => !prev)
+            }
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 transition hover:text-gray-600"
           >
-            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            {showPassword ? (
+              <EyeOff size={18} />
+            ) : (
+              <Eye size={18} />
+            )}
           </button>
         </div>
       </div>
 
+      {/* Confirm Password */}
       <div>
         <label className="mb-2 block text-sm font-medium text-gray-700">
           Confirm Password
         </label>
 
-        <input
-          type="password"
-          name="confirmPassword"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-          placeholder="Confirm your password"
-          required
-          className="w-full rounded-xl border border-gray-200 py-3 px-4 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
-        />
+        <div className="relative">
+          <Lock
+            size={18}
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+          />
+
+          <input
+            type={
+              showConfirmPassword
+                ? "text"
+                : "password"
+            }
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            placeholder="Confirm your password"
+            autoComplete="new-password"
+            required
+            className={`w-full rounded-xl border py-3 pl-10 pr-11 outline-none transition focus:ring-2 ${
+              passwordError
+                ? "border-red-300 focus:border-red-400 focus:ring-red-100"
+                : "border-gray-200 focus:border-amber-500 focus:ring-amber-100"
+            }`}
+          />
+
+          <button
+            type="button"
+            onClick={() =>
+              setShowConfirmPassword((prev) => !prev)
+            }
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 transition hover:text-gray-600"
+          >
+            {showConfirmPassword ? (
+              <EyeOff size={18} />
+            ) : (
+              <Eye size={18} />
+            )}
+          </button>
+        </div>
+
+        {passwordError && (
+          <p className="mt-2 text-sm text-red-500">
+            {passwordError}
+          </p>
+        )}
       </div>
 
-      <label className="flex items-start gap-2 text-sm text-gray-500">
+      {/* Terms */}
+      <label className="flex cursor-pointer items-start gap-2 text-sm text-gray-500">
         <input
           type="checkbox"
           required
@@ -155,12 +207,14 @@ const SignupForm = ({ role }) => {
         </span>
       </label>
 
+      {/* Submit */}
       <button
         type="submit"
         className="w-full rounded-xl bg-amber-500 py-3.5 font-semibold text-white shadow-lg shadow-amber-100 transition hover:bg-amber-600"
       >
         Create Account
       </button>
+
     </form>
   );
 };
