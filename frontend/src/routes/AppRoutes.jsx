@@ -5,6 +5,7 @@ import Landing from "../pages/Landing/Landing";
 import Login from "../pages/Auth/Login";
 import Signup from "../pages/Auth/Signup";
 import RoleSelection from "../pages/Auth/RoleSelection";
+
 import BeekeeperDashboard from "../pages/Beekeeper/BeekeeperDashboard";
 import Batches from "../pages/Beekeeper/Batches";
 import RegisterBatch from "../pages/Beekeeper/RegisterBatch";
@@ -14,85 +15,144 @@ import BeekeeperSettings from "../pages/Beekeeper/Settings";
 import BeekeeperProfile from "../pages/Beekeeper/Profile";
 import BeekeeperSecurity from "../pages/Beekeeper/Security";
 
+import ProtectedRoute from "../components/auth/ProtectedRoute";
+
 const AppRoutes = () => {
   return (
     <Routes>
-      {/* Public */}
-      <Route path="/" element={<Landing />} />
+      {/* =========================================
+          PUBLIC ROUTES
+      ========================================= */}
 
-      {/* Authentication */}
-      <Route path="/role-selection" element={<RoleSelection />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
+      <Route
+        path="/"
+        element={<Landing />}
+      />
 
-      {/* Temporary dashboard routes */}
-      {/* <Route
-        path="/beekeeper/dashboard"
-        element={
-          <div className="p-10 text-2xl font-bold">
-            Beekeeper Dashboard
-          </div>
-        }
-      /> */}
+      {/* =========================================
+          AUTHENTICATION ROUTES
+      ========================================= */}
+
+      <Route
+        path="/role-selection"
+        element={<RoleSelection />}
+      />
+
+      <Route
+        path="/login"
+        element={<Login />}
+      />
+
+      <Route
+        path="/signup"
+        element={<Signup />}
+      />
+
+      {/* =========================================
+          ADMIN ROUTES
+      ========================================= */}
 
       <Route
         path="/admin/dashboard"
         element={
-          <div className="p-10 text-2xl font-bold">
-            Admin Dashboard
-          </div>
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <div className="p-10 text-2xl font-bold">
+              Admin Dashboard
+            </div>
+          </ProtectedRoute>
         }
       />
+
+      {/* =========================================
+          CONSUMER ROUTES
+      ========================================= */}
 
       <Route
         path="/verify"
         element={
-          <div className="p-10 text-2xl font-bold">
-            Consumer Verification
-          </div>
+          <ProtectedRoute allowedRoles={["consumer"]}>
+            <div className="p-10 text-2xl font-bold">
+              Consumer Verification
+            </div>
+          </ProtectedRoute>
         }
       />
-      
+
+      {/* =========================================
+          BEEKEEPER ROUTES
+      ========================================= */}
+
       <Route
         path="/beekeeper/dashboard"
-        element={<BeekeeperDashboard />}
+        element={
+          <ProtectedRoute allowedRoles={["beekeeper"]}>
+            <BeekeeperDashboard />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/beekeeper/batches"
-        element={<Batches />}
+        element={
+          <ProtectedRoute allowedRoles={["beekeeper"]}>
+            <Batches />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/beekeeper/register"
-        element={<RegisterBatch />}
+        element={
+          <ProtectedRoute allowedRoles={["beekeeper"]}>
+            <RegisterBatch />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/beekeeper/qr-codes"
-        element={<QRManagement />}
+        element={
+          <ProtectedRoute allowedRoles={["beekeeper"]}>
+            <QRManagement />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/beekeeper/verification"
-        element={<Verification />}
+        element={
+          <ProtectedRoute allowedRoles={["beekeeper"]}>
+            <Verification />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/beekeeper/settings"
-        element={<BeekeeperSettings />}
+        element={
+          <ProtectedRoute allowedRoles={["beekeeper"]}>
+            <BeekeeperSettings />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/beekeeper/profile"
-        element={<BeekeeperProfile />}
+        element={
+          <ProtectedRoute allowedRoles={["beekeeper"]}>
+            <BeekeeperProfile />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path="/beekeeper/security"
-        element={<BeekeeperSecurity />}
+        element={
+          <ProtectedRoute allowedRoles={["beekeeper"]}>
+            <BeekeeperSecurity />
+          </ProtectedRoute>
+        }
       />
-
     </Routes>
   );
 };
