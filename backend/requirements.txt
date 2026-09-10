@@ -3,5 +3,5 @@ npm install -D nodemon
 npm install bcryptjs
 npm install jsonwebtoken
 
-mkdir config, controllers, middleware, models, routes, services, utils
-New-Item .env, .env.example, .gitignore, server.js -ItemType File
+# mkdir config, controllers, middleware, models, routes, services, utils
+# New-Item .env, .env.example, .gitignore, server.js -ItemType File

@@ -7,13 +7,8 @@ import Signup from "../pages/Auth/Signup";
 import RoleSelection from "../pages/Auth/RoleSelection";
 
 import BeekeeperDashboard from "../pages/Beekeeper/BeekeeperDashboard";
-import Batches from "../pages/Beekeeper/Batches";
-import RegisterBatch from "../pages/Beekeeper/RegisterBatch";
-import QRManagement from "../pages/Beekeeper/QRManagement";
-import Verification from "../pages/Beekeeper/Verification";
-import BeekeeperSettings from "../pages/Beekeeper/Settings";
-import BeekeeperProfile from "../pages/Beekeeper/Profile";
-import BeekeeperSecurity from "../pages/Beekeeper/Security";
+import Hives from "../pages/Beekeeper/Hives";
+import HiveDetails from "../components/beekeeper/hives/HiveDetails";
 
 import ProtectedRoute from "../components/auth/ProtectedRoute";
 
@@ -92,68 +87,24 @@ const AppRoutes = () => {
       />
 
       <Route
-        path="/beekeeper/batches"
+        path="/beekeeper/hives"
         element={
           <ProtectedRoute allowedRoles={["beekeeper"]}>
-            <Batches />
+            <Hives />
           </ProtectedRoute>
         }
       />
 
       <Route
-        path="/beekeeper/register"
+        path="/beekeeper/hives/:id"
         element={
           <ProtectedRoute allowedRoles={["beekeeper"]}>
-            <RegisterBatch />
+            <HiveDetails />
           </ProtectedRoute>
         }
       />
 
-      <Route
-        path="/beekeeper/qr-codes"
-        element={
-          <ProtectedRoute allowedRoles={["beekeeper"]}>
-            <QRManagement />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/beekeeper/verification"
-        element={
-          <ProtectedRoute allowedRoles={["beekeeper"]}>
-            <Verification />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/beekeeper/settings"
-        element={
-          <ProtectedRoute allowedRoles={["beekeeper"]}>
-            <BeekeeperSettings />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/beekeeper/profile"
-        element={
-          <ProtectedRoute allowedRoles={["beekeeper"]}>
-            <BeekeeperProfile />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/beekeeper/security"
-        element={
-          <ProtectedRoute allowedRoles={["beekeeper"]}>
-            <BeekeeperSecurity />
-          </ProtectedRoute>
-        }
-      />
-    </Routes>
+      </Routes>
   );
 };
 

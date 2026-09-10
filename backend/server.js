@@ -9,6 +9,8 @@ const rateLimit = require("express-rate-limit");
 const connectDB = require("./config/db");
 
 const authRoutes = require("./routes/authRoutes");
+const beekeeperRoutes = require("./routes/beekeeperRoutes");
+const hiveRoutes = require("./routes/hiveRoutes");
 
 // Load environment variables
 dotenv.config();
@@ -101,6 +103,13 @@ app.get("/api/health", (req, res) => {
 // ================================
 
 app.use("/api/auth", authRoutes);
+
+// ================================
+// Beekeeper Routes
+// ================================
+
+app.use("/api/beekeeper", beekeeperRoutes);
+app.use("/api/hives", hiveRoutes);
 
 
 
