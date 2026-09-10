@@ -1,293 +1,373 @@
-import { useState } from "react";
 import {
-  CalendarDays,
-  CheckCircle2,
-  ShieldCheck,
-  Sparkles,
+  Activity,
+  AlertTriangle,
+  Boxes,
+  Plus,
+  Weight,
 } from "lucide-react";
+import { useEffect, useState } from "react";
+
+import { getBeekeeperDashboard } from "../../services/dashboardService";
 
 import BeekeeperSidebar from "../../components/beekeeper/BeekeeperSidebar";
 import BeekeeperHeader from "../../components/beekeeper/BeekeeperHeader";
-import StatCard from "../../components/beekeeper/StatCard";
-import RecentBatches from "../../components/beekeeper/RecentBatches";
-import QuickActions from "../../components/beekeeper/QuickActions";
 
-import {
-  beekeeperStats,
-  recentBatches,
-} from "../../data/beekeeperData";
+import DashboardStat from "../../components/beekeeper/dashboard/DashboardStat";
+import HiveHealth from "../../components/beekeeper/dashboard/HiveHealth";
+import AttentionPanel from "../../components/beekeeper/dashboard/AttentionPanel";
+import RecentBatches from "../../components/beekeeper/dashboard/RecentBatches";
+import TraceabilitySummary from "../../components/beekeeper/dashboard/TraceabilitySummary";
 
 const BeekeeperDashboard = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  // ---------------------------------------------------------
-  // Current date
-  // ---------------------------------------------------------
-  const today = new Date();
+  const [dashboardData, setDashboardData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const formattedDate = today.toLocaleDateString("en-IN", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+  // =========================================================
+  // LOAD DASHBOARD DATA
+  // =========================================================
+
+  useEffect(() => {
+    const loadDashboard = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const response = await getBeekeeperDashboard();
+
+        if (response.success) {
+          setDashboardData(response.data);
+        } else {
+          setError(
+            response.message || "Failed to load dashboard"
+          );
+        }
+      } catch (err) {
+        console.error("Dashboard error:", err);
+
+        setError(
+          err.response?.data?.message ||
+            "Unable to load dashboard data"
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadDashboard();
+  }, []);
+
+  // =========================================================
+  // LOADING STATE
+  // =========================================================
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#f7f8f6]">
+
+        <BeekeeperSidebar
+          mobileOpen={mobileOpen}
+          setMobileOpen={setMobileOpen}
+        />
+
+        <div className="lg:pl-64">
+
+          <BeekeeperHeader
+            setMobileOpen={setMobileOpen}
+          />
+
+          <main className="mx-auto max-w-[1600px] px-4 py-8 sm:px-6 lg:px-8">
+
+            <div className="animate-pulse space-y-6">
+
+              {/* Dashboard header */}
+              <div className="space-y-3">
+                <div className="h-3 w-32 rounded bg-slate-200" />
+                <div className="h-9 w-72 rounded bg-slate-200" />
+                <div className="h-4 w-96 max-w-full rounded bg-slate-200" />
+              </div>
+
+              {/* Statistics */}
+              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+
+                <div className="h-32 rounded-2xl bg-white" />
+                <div className="h-32 rounded-2xl bg-white" />
+                <div className="h-32 rounded-2xl bg-white" />
+                <div className="h-32 rounded-2xl bg-white" />
+
+              </div>
+
+              {/* Hive health + alerts */}
+              <div className="grid gap-6 xl:grid-cols-[1.35fr_1fr]">
+
+                <div className="h-72 rounded-2xl bg-white" />
+
+                <div className="h-72 rounded-2xl bg-white" />
+
+              </div>
+
+              {/* Recent batches */}
+              <div className="h-80 rounded-2xl bg-white" />
+
+              {/* Traceability */}
+              <div className="h-32 rounded-2xl bg-white" />
+
+            </div>
+
+          </main>
+
+        </div>
+
+      </div>
+    );
+  }
+
+  // =========================================================
+  // ERROR STATE
+  // =========================================================
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-[#f7f8f6]">
+
+        <BeekeeperSidebar
+          mobileOpen={mobileOpen}
+          setMobileOpen={setMobileOpen}
+        />
+
+        <div className="lg:pl-64">
+
+          <BeekeeperHeader
+            setMobileOpen={setMobileOpen}
+          />
+
+          <main className="flex min-h-[calc(100vh-80px)] items-center justify-center px-6">
+
+            <div className="w-full max-w-md text-center">
+
+              {/* Error icon */}
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 text-red-500">
+                <AlertTriangle size={24} />
+              </div>
+
+              <h2 className="mt-5 text-lg font-bold text-slate-900">
+                Unable to load dashboard
+              </h2>
+
+              <p className="mt-2 text-sm leading-6 text-slate-500">
+                {error}
+              </p>
+
+              <button
+                type="button"
+                onClick={() => window.location.reload()}
+                className="
+                  mt-6
+                  rounded-xl
+                  bg-amber-500
+                  px-5
+                  py-2.5
+                  text-xs
+                  font-semibold
+                  text-white
+                  transition
+                  hover:bg-amber-600
+                "
+              >
+                Try Again
+              </button>
+
+            </div>
+
+          </main>
+
+        </div>
+
+      </div>
+    );
+  }
+
+  // =========================================================
+  // NORMAL DASHBOARD
+  // =========================================================
 
   return (
-    <div className="min-h-screen bg-[#f8f8f7]">
+    <div className="min-h-screen bg-[#f7f8f6]">
 
       {/* =====================================================
           SIDEBAR
       ====================================================== */}
+
       <BeekeeperSidebar
         mobileOpen={mobileOpen}
         setMobileOpen={setMobileOpen}
       />
 
       {/* =====================================================
-          MAIN CONTENT
+          MAIN APPLICATION
       ====================================================== */}
+
       <div className="lg:pl-64">
 
-        {/* Header */}
         <BeekeeperHeader
           setMobileOpen={setMobileOpen}
         />
 
-        <main className="px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+        <main className="mx-auto max-w-[1600px] px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
 
           {/* =================================================
-              WELCOME SECTION
+              DASHBOARD HEADER
           ================================================== */}
-          <section className="mb-7">
 
-            <div
-              className="
-                relative overflow-hidden
-                rounded-2xl
-                border border-amber-100
-                bg-gradient-to-r
-                from-amber-50
-                via-white
-                to-orange-50/60
-                px-5 py-5
-                shadow-sm
-                sm:px-6 sm:py-6
-              "
-            >
+          <section className="mb-8">
 
-              {/* Decorative circles */}
-              <div
-                className="
-                  pointer-events-none
-                  absolute -right-10 -top-14
-                  h-40 w-40
-                  rounded-full
-                  bg-amber-100/40
-                  blur-2xl
-                "
-              />
+            <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
 
-              <div
-                className="
-                  pointer-events-none
-                  absolute -bottom-16
-                  right-24
-                  h-32 w-32
-                  rounded-full
-                  bg-orange-100/30
-                  blur-2xl
-                "
-              />
+              <div>
 
-              <div className="relative z-10 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+                <div className="mb-2 flex items-center gap-2">
 
-                {/* Welcome text */}
-                <div>
-                  {/* Date */}
-                  <div className="flex items-center gap-2">
-                    <CalendarDays
-                      size={14}
-                      className="text-amber-500"
-                    />
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
 
-                    <p
-                      className="
-                        text-xs
-                        font-bold
-                        text-amber-600
-                        sm:text-sm
-                      "
-                    >
-                      {formattedDate}
-                    </p>
-                  </div>
+                  <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400">
+                    Beekeeper overview
+                  </span>
 
-                  {/* Heading */}
-                  <h1
-                    className="
-                      mt-2
-                      text-2xl
-                      font-extrabold
-                      tracking-tight
-                      text-slate-900
-                      sm:text-3xl
-                    "
-                  >
-                    Warm regards, Beekeeper
-                    <span className="ml-1">👋</span>
-                  </h1>
-
-                  <p
-                    className="
-                      mt-2
-                      max-w-xl
-                      text-sm
-                      font-medium
-                      leading-relaxed
-                      text-slate-500
-                    "
-                  >
-                    Here's what's happening with your
-                    honey batches and traceability records.
-                  </p>
                 </div>
 
-                {/* Verification Summary */}
-                <div
-                  className="
-                    flex shrink-0
-                    items-center gap-3
-                    rounded-xl
-                    border border-white
-                    bg-white/80
-                    px-4 py-3
-                    shadow-sm
-                    backdrop-blur-sm
-                  "
-                >
-                  <div
-                    className="
-                      flex h-10 w-10
-                      items-center justify-center
-                      rounded-xl
-                      bg-emerald-50
-                      text-emerald-600
-                      ring-1 ring-emerald-100
-                    "
-                  >
-                    <ShieldCheck size={19} />
-                  </div>
+                <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+                  Good morning, Beekeeper
+                </h1>
 
-                  <div>
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                      Traceability
-                    </p>
+                <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
+                  Monitor your hives, manage honey production, and
+                  keep every batch traceable from hive to consumer.
+                </p>
 
-                    <div className="mt-0.5 flex items-center gap-1.5">
-                      <CheckCircle2
-                        size={13}
-                        className="text-emerald-500"
-                      />
-
-                      <p className="text-xs font-bold text-emerald-600">
-                        System Active
-                      </p>
-                    </div>
-                  </div>
-                </div>
               </div>
+
+              {/* Register Harvest */}
+              <button
+                type="button"
+                className="
+                  inline-flex
+                  items-center
+                  justify-center
+                  gap-2
+                  rounded-xl
+                  bg-amber-500
+                  px-5
+                  py-3
+                  text-sm
+                  font-semibold
+                  text-white
+                  shadow-sm
+                  transition
+                  hover:bg-amber-600
+                  active:scale-[0.98]
+                "
+              >
+                <Plus size={17} />
+                Register Harvest
+              </button>
+
             </div>
+
           </section>
 
           {/* =================================================
-              KPI SECTION
+              STATISTICS
           ================================================== */}
-          <section>
-            <div className="mb-4 flex items-center justify-between">
-              <div>
-                <div className="flex items-center gap-2">
-                  <Sparkles
-                    size={15}
-                    className="text-amber-500"
-                  />
 
-                  <h2 className="text-sm font-bold text-slate-800">
-                    Your Overview
-                  </h2>
-                </div>
-
-                <p className="mt-0.5 text-[11px] font-medium text-slate-400">
-                  Key metrics from your honey operations
-                </p>
-              </div>
-            </div>
+          <section className="mb-8">
 
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-              {beekeeperStats.map((stat, index) => (
-                <StatCard
-                  key={stat.title}
-                  {...stat}
-                  color={
-                    stat.color ||
-                    ["amber", "green", "blue", "purple"][index % 4]
-                  }
-                />
-              ))}
+
+              <DashboardStat
+                icon={<Activity size={19} />}
+                label="Active Hives"
+                value={
+                  dashboardData?.stats?.activeHives ?? 0
+                }
+                description={`${dashboardData?.hiveHealth?.healthy ?? 0} healthy`}
+              />
+
+              <DashboardStat
+                icon={<Boxes size={19} />}
+                label="Active Batches"
+                value={
+                  dashboardData?.stats?.activeBatches ?? 0
+                }
+                description="Currently active"
+              />
+
+              <DashboardStat
+                icon={<Weight size={19} />}
+                label="Honey Harvested"
+                value={`${dashboardData?.stats?.harvestedHoney ?? 0} kg`}
+                description="This season"
+              />
+
+              <DashboardStat
+                icon={<AlertTriangle size={19} />}
+                label="Attention Needed"
+                value={
+                  dashboardData?.stats?.attentionRequired ?? 0
+                }
+                description="Requires your action"
+                warning
+              />
+
             </div>
+
           </section>
 
           {/* =================================================
-              MAIN DASHBOARD CONTENT
+              HIVE HEALTH + ALERTS
           ================================================== */}
-          <section className="mt-7">
 
-            <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
+          <section className="mb-8 grid gap-6 xl:grid-cols-[1.35fr_1fr]">
 
-              {/* Recent Batches */}
-              <div className="min-w-0">
-                <RecentBatches
-                  batches={recentBatches}
-                />
-              </div>
+            <HiveHealth
+              data={dashboardData?.hiveHealth}
+            />
 
-              {/* Quick Actions */}
-              <div className="min-w-0">
-                <QuickActions />
-              </div>
+            <AttentionPanel
+              alerts={dashboardData?.alerts || []}
+            />
 
-            </div>
           </section>
 
           {/* =================================================
-              FOOTER STATUS
+              RECENT BATCHES
           ================================================== */}
-          <div
-            className="
-              mt-7
-              flex flex-col
-              gap-2
-              border-t border-slate-200/70
-              pt-4
-              text-[10px]
-              font-medium
-              text-slate-400
-              sm:flex-row
-              sm:items-center
-              sm:justify-between
-            "
-          >
-            <p>
-              HoneyChain • Smart Honey Traceability
-            </p>
 
-            <div className="flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              All systems operational
-            </div>
-          </div>
+          <section className="mb-8">
+
+            <RecentBatches
+              batches={dashboardData?.recentBatches || []}
+            />
+
+          </section>
+
+          {/* =================================================
+              TRACEABILITY
+          ================================================== */}
+
+          <section>
+
+            <TraceabilitySummary
+              data={dashboardData?.traceability}
+            />
+
+          </section>
 
         </main>
+
       </div>
+
     </div>
   );
 };
