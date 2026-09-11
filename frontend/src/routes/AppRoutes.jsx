@@ -8,6 +8,8 @@ import RoleSelection from "../pages/Auth/RoleSelection";
 
 import BeekeeperDashboard from "../pages/Beekeeper/BeekeeperDashboard";
 import Hives from "../pages/Beekeeper/Hives";
+import MyProfile from "../pages/Beekeeper/MyProfile";
+import Settings from "../pages/Beekeeper/Settings";
 import HiveDetails from "../components/beekeeper/hives/HiveDetails";
 
 import ProtectedRoute from "../components/auth/ProtectedRoute";
@@ -104,6 +106,24 @@ const AppRoutes = () => {
         }
       />
 
+      <Route
+        path="/beekeeper/profile"
+        element={
+          <ProtectedRoute allowedRoles={["beekeeper"]}>
+            <MyProfile />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/beekeeper/settings"
+        element={
+          <ProtectedRoute allowedRoles={["beekeeper"]}>
+            <Settings />
+          </ProtectedRoute>
+        }
+      />
+      
       </Routes>
   );
 };

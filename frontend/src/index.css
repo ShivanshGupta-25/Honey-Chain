@@ -81,3 +81,377 @@ button {
 #root {
   width: 100%;
 }
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+html.dark {
+  color-scheme: dark;
+}
+
+html.dark body {
+  background: #020712;
+  color: #f1f5f9;
+}
+
+/* Main page background */
+html.dark .bg-slate-50 {
+  background-color: #07111f;
+}
+
+/* Cards / panels */
+html.dark .bg-white {
+  background-color: #070f1d;
+}
+
+/* Borders */
+html.dark .border-slate-200,
+html.dark .border-slate-100 {
+  border-color: #1d3b66;
+}
+
+/* Dividers */
+html.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) {
+  border-color: #1d3b66;
+}
+
+/* Main text */
+html.dark .text-slate-800 {
+  color: #f1f5f9;
+}
+
+html.dark .text-slate-700 {
+  color: #e2e8f0;
+}
+
+/* Secondary text */
+html.dark .text-slate-600 {
+  color: #c5d7ee;
+}
+
+html.dark .text-slate-500 {
+  color: #8fa9c9;
+}
+
+html.dark .text-slate-400 {
+  color: #7895bb;
+}
+
+/* Form controls */
+html.dark select {
+  background-color: #07111f;
+  color: #e2e8f0;
+  border-color: #31517d;
+}
+
+/* Input fields */
+html.dark input,
+html.dark textarea {
+  background-color: #07111f;
+  color: #e2e8f0;
+  border-color: #31517d;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: #647fa5;
+}
+
+/* Soft blue surfaces */
+html.dark .bg-slate-50 {
+  box-shadow: inset 0 0 30px rgba(30, 64, 175, 0.04);
+}
+
+/* Card glow */
+html.dark .shadow-sm {
+  box-shadow:
+    0 10px 35px rgba(0, 0, 0, 0.35),
+    0 0 25px rgba(30, 64, 175, 0.06);
+}
+
+/* =========================================================
+   DARK MODE - APPLICATION OVERRIDES
+========================================================= */
+
+html.dark body {
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+html.dark .bg-slate-50 {
+  background-color: #1e293b;
+}
+
+html.dark .bg-white {
+  background-color: #0f172a;
+}
+
+html.dark .border-slate-200,
+html.dark .border-slate-100 {
+  border-color: #334155;
+}
+
+html.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) {
+  border-color: #334155;
+}
+
+html.dark .text-slate-800,
+html.dark .text-slate-700 {
+  color: #e2e8f0;
+}
+
+html.dark .text-slate-600 {
+  color: #cbd5e1;
+}
+
+html.dark .text-slate-500 {
+  color: #94a3b8;
+}
+
+html.dark .text-slate-400 {
+  color: #94a3b8;
+}
+
+html.dark select {
+  background-color: #1e293b;
+  color: #e2e8f0;
+  border-color: #475569;
+}
+
+/* =========================================================
+   DARK MODE - AMBIENT BLUE GLOW
+========================================================= */
+
+html.dark body {
+  background:
+    radial-gradient(
+      circle at 90% 0%,
+      rgba(30, 64, 175, 0.18),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 0% 100%,
+      rgba(30, 64, 175, 0.12),
+      transparent 28%
+    ),
+    #020712;
+}
+
+/* =========================================================
+   SETTINGS PAGE - PREMIUM DARK THEME
+========================================================= */
+
+html.dark .settings-page {
+  background:
+    radial-gradient(
+      circle at 92% 0%,
+      rgba(37, 99, 235, 0.16),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 0% 100%,
+      rgba(30, 64, 175, 0.10),
+      transparent 25%
+    ),
+    #02050b;
+}
+
+/* Settings main card */
+html.dark .settings-page .bg-white {
+  background: #060b14;
+  border-color: #203a61;
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.45),
+    0 0 35px rgba(30, 64, 175, 0.08);
+}
+
+/* Card header and rows */
+html.dark .settings-page .border-slate-100,
+html.dark .settings-page .border-slate-200 {
+  border-color: #203a61;
+}
+
+/* Text */
+html.dark .settings-page .text-slate-800 {
+  color: #f8fafc;
+}
+
+html.dark .settings-page .text-slate-700 {
+  color: #f1f5f9;
+}
+
+html.dark .settings-page .text-slate-600 {
+  color: #c7d8ef;
+}
+
+html.dark .settings-page .text-slate-500 {
+  color: #91acd0;
+}
+
+html.dark .settings-page .text-slate-400 {
+  color: #7895bb;
+}
+
+/* Icon containers */
+html.dark .settings-page .bg-slate-50 {
+  background: #10213d;
+}
+
+/* Select boxes */
+html.dark .settings-page select {
+  background: #060b14;
+  color: #dbeafe;
+  border-color: #294b78;
+}
+
+/* Appearance select - amber focus */
+html.dark .settings-page select:focus {
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.15);
+}
+
+/* =========================================================
+   SETTINGS PAGE - CONSISTENT DIVIDERS
+========================================================= */
+
+html.dark .settings-page .divide-y > * {
+  border-color: #203a61 !important;
+}
+
+html.dark .settings-page .divide-y > * + * {
+  border-block-start-color: #203a61 !important;
+  border-block-end-color: #203a61 !important;
+}
+
+/* =========================================================
+   DASHBOARD - PREMIUM DARK THEME
+========================================================= */
+
+html.dark .dashboard-page {
+  background:
+    radial-gradient(
+      circle at 90% 0%,
+      rgba(37, 99, 235, 0.12),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 0% 100%,
+      rgba(30, 64, 175, 0.08),
+      transparent 25%
+    ),
+    #02050b;
+}
+
+/* Dashboard main text */
+html.dark .dashboard-page .text-slate-900 {
+  color: #f8fafc;
+}
+
+/* Dashboard secondary text */
+html.dark .dashboard-page .text-slate-500 {
+  color: #8fa9c9;
+}
+
+html.dark .dashboard-page .text-slate-400 {
+  color: #7895bb;
+}
+
+/* Loading placeholders */
+html.dark .dashboard-page .bg-slate-200 {
+  background-color: #172b4d;
+}
+
+/* Error icon background */
+html.dark .dashboard-page .bg-red-50 {
+  background-color: #2a1115;
+}
+
+/* =========================================================
+   BEEKEEPER HEADER - DARK THEME
+========================================================= */
+
+html.dark .beekeeper-header {
+  background: rgba(2, 5, 11, 0.92);
+  border-bottom-color: #1d3b66;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.25);
+}
+
+html.dark .beekeeper-header .text-slate-500 {
+  color: #8fa9c9;
+}
+
+html.dark .beekeeper-header .text-slate-800 {
+  color: #f1f5f9;
+}
+
+html.dark .beekeeper-header .text-slate-400 {
+  color: #7895bb;
+}
+
+html.dark .beekeeper-header .bg-slate-50 {
+  background-color: #10213d;
+}
+
+html.dark .beekeeper-header .bg-slate-100 {
+  background-color: #10213d;
+}
+
+html.dark .beekeeper-header input {
+  background-color: #07111f;
+  border-color: #203a61;
+  color: #e2e8f0;
+}
+
+html.dark .beekeeper-header input::placeholder {
+  color: #7895bb;
+}
+
+html.dark .beekeeper-header input:focus {
+  border-color: #315b91;
+  background-color: #07111f;
+}
+
+html.dark .beekeeper-header .bg-amber-100 {
+  background-color: #172a4a;
+}
+
+html.dark .beekeeper-header .text-amber-700 {
+  color: #fbbf24;
+}
+
+html.dark .beekeeper-header .border-slate-200 {
+  border-color: #203a61;
+}
+
+/* =========================================================
+   ACCOUNT MENU - DARK THEME
+========================================================= */
+
+html.dark .account-menu {
+  background: #070f1d;
+  border-color: #203a61;
+  box-shadow:
+    0 20px 45px rgba(0, 0, 0, 0.45),
+    0 0 25px rgba(30, 64, 175, 0.08);
+}
+
+html.dark .account-menu button:hover {
+  background-color: #10213d !important;
+}
+
+html.dark .account-menu .text-slate-700 {
+  color: #e2e8f0;
+}
+
+html.dark .account-menu .text-slate-500 {
+  color: #8fa9c9;
+}
+
+html.dark .account-menu .text-slate-400 {
+  color: #7895bb;
+}
+
+html.dark .account-menu .border-slate-100 {
+  border-color: #203a61;
+}

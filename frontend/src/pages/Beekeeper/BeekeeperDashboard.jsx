@@ -65,7 +65,7 @@ const BeekeeperDashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#f7f8f6]">
+      <div className="dashboard-page min-h-screen">
 
         <BeekeeperSidebar
           mobileOpen={mobileOpen}
@@ -130,7 +130,7 @@ const BeekeeperDashboard = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#f7f8f6]">
+      <div className="dashboard-page min-h-screen">
 
         <BeekeeperSidebar
           mobileOpen={mobileOpen}
@@ -194,7 +194,7 @@ const BeekeeperDashboard = () => {
   // =========================================================
 
   return (
-    <div className="min-h-screen bg-[#f7f8f6]">
+    <div className="dashboard-page min-h-screen">
 
       {/* =====================================================
           SIDEBAR

@@ -4,11 +4,15 @@ import {
   Search,
   UserRound,
 } from "lucide-react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import AccountMenu from "./account/AccountMenu";
 
 const BeekeeperHeader = ({ setMobileOpen }) => {
+  const [accountOpen, setAccountOpen] = useState(false);
+
   return (
-    <header className="sticky top-0 z-30 h-20 border-b border-slate-200/80 bg-white/90 backdrop-blur-md">
+    <header className="beekeeper-header sticky top-0 z-30 h-20 border-b border-slate-200/80 bg-white/90 backdrop-blur-md">
 
       <div className="flex h-full items-center justify-between px-4 sm:px-6 lg:px-8">
 
@@ -85,29 +89,42 @@ const BeekeeperHeader = ({ setMobileOpen }) => {
           <div className="mx-1 hidden h-7 w-px bg-slate-200 sm:block" />
 
 
-          {/* Profile */}
-          <Link
-            to="/beekeeper/profile"
-            className="flex items-center gap-3 rounded-xl px-2 py-1.5 transition hover:bg-slate-50"
-          >
+          {/* Account */}
+          <div className="relative">
 
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-amber-100 text-amber-700">
-              <UserRound size={16} />
-            </div>
+            <button
+              type="button"
+              onClick={() => setAccountOpen((prev) => !prev)}
+              className="flex items-center gap-3 rounded-xl px-2 py-1.5 transition hover:bg-slate-50"
+            >
 
-            <div className="hidden text-left sm:block">
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-amber-100 text-amber-700">
+                <UserRound size={16} />
+              </div>
 
-              <p className="text-xs font-semibold text-slate-800">
-                Beekeeper
-              </p>
+              <div className="hidden text-left sm:block">
 
-              <p className="text-[10px] text-slate-400">
-                Account
-              </p>
+                <p className="text-xs font-semibold text-slate-800">
+                  Beekeeper
+                </p>
 
-            </div>
+                <p className="text-[10px] text-slate-400">
+                  Account
+                </p>
 
-          </Link>
+              </div>
+
+            </button>
+
+
+            {/* Account Dropdown */}
+            {accountOpen && (
+              <AccountMenu
+                onClose={() => setAccountOpen(false)}
+              />
+            )}
+
+          </div>
 
         </div>
 
