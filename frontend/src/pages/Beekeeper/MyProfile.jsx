@@ -14,7 +14,7 @@ import ProfileHeader from "../../components/beekeeper/profile/ProfileHeader";
 import ProfileSection from "../../components/beekeeper/profile/ProfileSection";
 import ProfileInfoItem from "../../components/beekeeper/profile/ProfileInfoItem";
 import EditProfileModal from "../../components/beekeeper/profile/EditProfileModal";
-import ChangePasswordModal from "../../components/beekeeper/profile/ChangePasswordModal";
+import ChangePasswordModal from "../../components/beekeeper/account/ChangePasswordModal";
 
 import {
   getCurrentUser,

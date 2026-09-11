@@ -13,6 +13,7 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const beekeeperRoutes = require("./routes/beekeeperRoutes");
 const hiveRoutes = require("./routes/hiveRoutes");
+const settingsRoutes = require("./routes/settingsRoutes");
 
 // Load environment variables
 dotenv.config();
@@ -114,6 +115,11 @@ app.use("/api/beekeeper", beekeeperRoutes);
 app.use("/api/hives", hiveRoutes);
 
 
+// ================================
+// Settings Routes
+// ================================
+
+app.use("/api/settings", settingsRoutes);
 
 
 // ================================

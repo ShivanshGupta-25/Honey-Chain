@@ -1,164 +1,455 @@
+import { useEffect, useState } from "react";
 import {
-  Bell,
-  Globe,
-  Moon,
   ArrowLeft,
+  Loader2,
 } from "lucide-react";
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useTheme } from "../../context/ThemeContext";
+import { Link, useNavigate } from "react-router-dom";
+
+import SettingsSidebar from "../../components/beekeeper/settings/SettingsSidebar";
+import GeneralSettings from "../../components/beekeeper/settings/GeneralSettings";
+import NotificationSettings from "../../components/beekeeper/settings/NotificationSettings";
+import SecuritySettings from "../../components/beekeeper/settings/SecuritySettings";
+import PrivacySettings from "../../components/beekeeper/settings/PrivacySettings";
+import DangerZone from "../../components/beekeeper/settings/DangerZone";
+import ChangePasswordModal from "../../components/beekeeper/account/ChangePasswordModal";
+
+import {
+  getSettings,
+  updateGeneralSettings,
+  updateNotificationSettings,
+  updatePrivacySettings,
+} from "../../api/settingsApi";
+
+import { getUser, logout } from "../../utils/auth";
+import { changePassword } from "../../api/authApi";
+
+const defaultSettings = {
+  language: "en",
+  timezone: "Asia/Kolkata",
+  dateFormat: "DD/MM/YYYY",
+
+  notifications: {
+    hiveHealth: true,
+    batchUpdates: true,
+    system: true,
+    email: true,
+  },
+
+  privacy: {
+    profileVisibility: "private",
+  },
+};
 
 const Settings = () => {
-    const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  const navigate = useNavigate();
+
+  const [activeSection, setActiveSection] =
+    useState("general");
+
+  const [settings, setSettings] =
+    useState(defaultSettings);
+
+  const [profile, setProfile] =
+    useState(getUser());
+
+  const [loading, setLoading] =
+    useState(true);
+
+  const [saving, setSaving] =
+    useState(false);
+
+  const [message, setMessage] =
+    useState("");
+
+  const [error, setError] =
+    useState("");
+
+    const [isPasswordOpen, setIsPasswordOpen] =
+    useState(false);
+
+  const [passwordLoading, setPasswordLoading] =
+    useState(false);
+
+  const [passwordError, setPasswordError] =
+    useState("");
+
+  const [passwordSuccess, setPasswordSuccess] =
+    useState("");
+
+  // ========================================
+  // Load Settings
+  // ========================================
+
+  useEffect(() => {
+    const loadSettings = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const data =
+          await getSettings();
+
+        if (data?.settings) {
+          setSettings({
+            ...defaultSettings,
+            ...data.settings,
+
+            notifications: {
+              ...defaultSettings.notifications,
+              ...data.settings.notifications,
+            },
+
+            privacy: {
+              ...defaultSettings.privacy,
+              ...data.settings.privacy,
+            },
+          });
+        }
+
+      } catch (error) {
+        console.error(
+          "Failed to load settings:",
+          error
+        );
+
+        setError(
+          error?.response?.data?.message ||
+            "Failed to load settings."
+        );
+
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadSettings();
+  }, []);
+
+  // ========================================
+  // Clear Messages
+  // ========================================
+
+  const showMessage = (text) => {
+    setMessage(text);
+
+    setTimeout(() => {
+      setMessage("");
+    }, 3000);
+  };
+
+  // ========================================
+  // Update Local Settings
+  // ========================================
+
+  const updateLocalSettings = (
+    changes
+  ) => {
+    setSettings((prev) => ({
+      ...prev,
+      ...changes,
+    }));
+  };
+
+  // ========================================
+  // Save General
+  // ========================================
+
+  const handleGeneralSave = async () => {
+    try {
+      setSaving(true);
+      setError("");
+
+      const data =
+        await updateGeneralSettings({
+          language: settings.language,
+          timezone: settings.timezone,
+          dateFormat: settings.dateFormat,
+        });
+
+      if (data?.settings) {
+        setSettings(data.settings);
+      }
+
+      showMessage(
+        "General settings saved successfully."
+      );
+
+    } catch (error) {
+      setError(
+        error?.response?.data?.message ||
+          "Failed to save general settings."
+      );
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  // ========================================
+  // Save Notifications
+  // ========================================
+
+  const handleNotificationSave =
+    async () => {
+      try {
+        setSaving(true);
+        setError("");
+
+        const data =
+          await updateNotificationSettings(
+            settings.notifications
+          );
+
+        if (data?.settings) {
+          setSettings(data.settings);
+        }
+
+        showMessage(
+          "Notification preferences saved."
+        );
+
+      } catch (error) {
+        setError(
+          error?.response?.data?.message ||
+            "Failed to save notification settings."
+        );
+      } finally {
+        setSaving(false);
+      }
+    };
+
+  // ========================================
+  // Save Privacy
+  // ========================================
+
+  const handlePrivacySave = async () => {
+    try {
+      setSaving(true);
+      setError("");
+
+      const data =
+        await updatePrivacySettings(
+          settings.privacy
+        );
+
+      if (data?.settings) {
+        setSettings(data.settings);
+      }
+
+      showMessage(
+        "Privacy settings saved successfully."
+      );
+
+    } catch (error) {
+      setError(
+        error?.response?.data?.message ||
+          "Failed to save privacy settings."
+      );
+    } finally {
+      setSaving(false);
+    }
+  };
+
   
-    const [language, setLanguage] = useState("English");
-  
-    const { theme, changeTheme } = useTheme();
+
+  // ========================================
+  // Change Password 
+  // ========================================
+
+  const handleChangePassword = async (
+    passwordData
+  ) => {
+    try {
+      setPasswordLoading(true);
+      setPasswordError("");
+      setPasswordSuccess("");
+
+      const data =
+        await changePassword(passwordData);
+
+      setPasswordSuccess(
+        data?.message ||
+          "Password changed successfully."
+      );
+
+      setTimeout(() => {
+        setIsPasswordOpen(false);
+        setPasswordSuccess("");
+      }, 1500);
+
+    } catch (error) {
+      console.error(
+        "Change password error:",
+        error
+      );
+
+      setPasswordError(
+        error?.response?.data?.message ||
+          "Failed to change password."
+      );
+
+    } finally {
+      setPasswordLoading(false);
+    }
+  };
+
+  // ========================================
+  // Logout
+  // ========================================
+
+  const handleLogout = () => {
+    logout();
+
+    navigate("/login", {
+      replace: true,
+    });
+  };
+
+  // ========================================
+  // Loading
+  // ========================================
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-slate-50">
+        <div className="flex min-h-screen items-center justify-center">
+          <div className="flex flex-col items-center gap-3">
+            <Loader2
+              size={28}
+              className="animate-spin text-amber-600"
+            />
+
+            <p className="text-sm text-slate-500">
+              Loading settings...
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="settings-page min-h-screen p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-slate-50 p-4 sm:p-6 lg:p-8">
+      <div className="mx-auto max-w-6xl">
 
-      {/* Back */}
-      <Link
-        to="/beekeeper/dashboard"
-        className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition hover:text-slate-800"
-      >
-        <ArrowLeft size={17} />
-        Back to Dashboard
-      </Link>
+        {/* Back */}
+        <div className="mb-6">
+          <Link
+            to="/beekeeper/dashboard"
+            className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition hover:text-slate-800"
+          >
+            <ArrowLeft size={17} />
+            Back to Dashboard
+          </Link>
+        </div>
 
-      {/* Settings Card */}
-      <div className="mx-auto max-w-3xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        {/* Heading */}
+        <div className="mb-6">
+          <p className="text-xs font-semibold uppercase tracking-wider text-amber-600">
+            Account
+          </p>
 
-        {/* Header */}
-        <div className="border-b border-slate-100 px-6 py-6 sm:px-8">
-          <h1 className="text-xl font-bold text-slate-800">
+          <h1 className="mt-1 text-2xl font-bold tracking-tight text-slate-800">
             Settings
           </h1>
 
-          <p className="mt-1 text-sm text-slate-400">
-            Manage your account preferences
+          <p className="mt-1 text-sm text-slate-500">
+            Manage your Honey Chain preferences,
+            notifications and account settings.
           </p>
         </div>
 
+        {/* Messages */}
+        {message && (
+          <div className="mb-5 rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
+            {message}
+          </div>
+        )}
 
-        {/* Settings */}
-        <div className="divide-y divide-slate-100">
+        {error && (
+          <div className="mb-5 rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
+            {error}
+          </div>
+        )}
 
-          {/* Notifications */}
-          <div className="flex items-center justify-between gap-4 px-6 py-5 sm:px-8">
+        {/* Settings Layout */}
+        <div className="grid gap-6 lg:grid-cols-[250px_minmax(0,1fr)]">
 
-            <div className="flex items-center gap-4">
+          {/* Sidebar */}
+          <SettingsSidebar
+            activeSection={activeSection}
+            onSectionChange={setActiveSection}
+          />
 
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-50 text-slate-500">
-                <Bell size={18} />
-              </div>
+          {/* Content */}
+          <div>
+            {activeSection ===
+              "general" && (
+              <GeneralSettings
+                settings={settings}
+                onChange={updateLocalSettings}
+                onSave={handleGeneralSave}
+                loading={saving}
+              />
+            )}
 
-              <div>
-                <p className="text-sm font-semibold text-slate-700">
-                  Notifications
-                </p>
-
-                <p className="mt-1 text-xs text-slate-400">
-                  Receive alerts and important updates
-                </p>
-              </div>
-
-            </div>
-
-        
-
-            <button
-                type="button"
-                onClick={() => 
-                    setNotificationsEnabled((prev) => !prev)
+            {activeSection ===
+              "notifications" && (
+              <NotificationSettings
+                settings={settings}
+                onChange={updateLocalSettings}
+                onSave={
+                  handleNotificationSave
                 }
-                className={`h-6 w-11 rounded-full p-1 transition ${
-                    notificationsEnabled
-                    ? "bg-amber-500"
-                    : "bg-slate-300"
-                }`}
-            >
-                <div
-                    className={`h-4 w-4 rounded-full bg-white shadow-sm transition ${
-                        notificationsEnabled
-                        ? "translate-x-5"
-                        : "translate-x-0"
-                    }`}
-                />
-            </button>
+                loading={saving}
+              />
+            )}
 
+            {activeSection ===
+              "security" && (
+              <SecuritySettings
+                profile={profile}
+                onChangePassword={() => {
+                  setPasswordError("");
+                  setPasswordSuccess("");
+                  setIsPasswordOpen(true);
+                }}
+              />
+            )}
+
+            {activeSection ===
+              "privacy" && (
+              <PrivacySettings
+                settings={settings}
+                onChange={updateLocalSettings}
+                onSave={handlePrivacySave}
+                loading={saving}
+              />
+            )}
+
+            {activeSection ===
+              "danger" && (
+              <DangerZone
+                onLogout={handleLogout}
+              />
+            )}
           </div>
-
-
-          {/* Language */}
-          <div className="flex items-center justify-between gap-4 px-6 py-5 sm:px-8">
-
-            <div className="flex items-center gap-4">
-
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-50 text-slate-500">
-                <Globe size={18} />
-              </div>
-
-              <div>
-                <p className="text-sm font-semibold text-slate-700">
-                  Language
-                </p>
-
-                <p className="mt-1 text-xs text-slate-400">
-                  Choose your preferred language
-                </p>
-              </div>
-
-            </div>
-
-            <select
-                value={language}
-                onChange={(e) => setLanguage(e.target.value)}
-                className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-600 outline-none transition focus:border-amber-300 focus:ring-2 focus:ring-amber-100"
-            >
-                <option value="English">English</option>
-                <option value="Hindi">Hindi</option>
-            </select>
-
-          </div>
-
-
-          {/* Appearance */}
-          <div className="flex items-center justify-between gap-4 px-6 py-5 sm:px-8">
-
-            <div className="flex items-center gap-4">
-
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-50 text-slate-500">
-                <Moon size={18} />
-              </div>
-
-              <div>
-                <p className="text-sm font-semibold text-slate-700">
-                  Appearance
-                </p>
-
-                <p className="mt-1 text-xs text-slate-400">
-                  Choose how the dashboard looks
-                </p>
-              </div>
-
-            </div>
-
-            <select
-                value={theme}
-                onChange={(e) => changeTheme(e.target.value)}
-                className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-600 outline-none transition focus:border-amber-300 focus:ring-2 focus:ring-amber-100"
-            >
-                <option value="Light">Light</option>
-                <option value="Dark">Dark</option>
-            </select>
-
-          </div>
-
         </div>
-
       </div>
+
+      <ChangePasswordModal
+        isOpen={isPasswordOpen}
+        onClose={() => {
+          if (!passwordLoading) {
+            setIsPasswordOpen(false);
+            setPasswordError("");
+            setPasswordSuccess("");
+          }
+        }}
+        onSave={handleChangePassword}
+        loading={passwordLoading}
+        error={passwordError}
+        success={passwordSuccess}
+      />
 
     </div>
   );
