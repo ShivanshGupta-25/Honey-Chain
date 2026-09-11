@@ -42,9 +42,68 @@ const userSchema = new mongoose.Schema(
       default: "",
     },
 
+    location: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+
     isActive: {
       type: Boolean,
       default: true,
+    },
+
+    settings: {
+      language: {
+        type: String,
+        enum: ["en"],
+        default: "en",
+      },
+
+      timezone: {
+        type: String,
+        default: "Asia/Kolkata",
+      },
+
+      dateFormat: {
+        type: String,
+        enum: [
+          "DD/MM/YYYY",
+          "MM/DD/YYYY",
+          "YYYY-MM-DD",
+        ],
+        default: "DD/MM/YYYY",
+      },
+
+      notifications: {
+        hiveHealth: {
+          type: Boolean,
+          default: true,
+        },
+
+        batchUpdates: {
+          type: Boolean,
+          default: true,
+        },
+
+        system: {
+          type: Boolean,
+          default: true,
+        },
+
+        email: {
+          type: Boolean,
+          default: true,
+        },
+      },
+
+      privacy: {
+        profileVisibility: {
+          type: String,
+          enum: ["private", "organization"],
+          default: "private",
+        },
+      },
     },
   },
   {

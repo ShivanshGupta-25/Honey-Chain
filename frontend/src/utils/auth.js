@@ -16,9 +16,33 @@ export const saveAuth = (data) => {
   );
 };
 
+
+// ========================================
+// Update Stored User
+// ========================================
+
+export const updateStoredUser = (user) => {
+  if (!user) return;
+
+  localStorage.setItem(
+    "user",
+    JSON.stringify(user)
+  );
+};
+
+
+// ========================================
+// Get Token
+// ========================================
+
 export const getToken = () => {
   return localStorage.getItem("token");
 };
+
+
+// ========================================
+// Get User
+// ========================================
 
 export const getUser = () => {
   const storedUser =
@@ -35,11 +59,21 @@ export const getUser = () => {
   }
 };
 
+
+// ========================================
+// Authentication Check
+// ========================================
+
 export const isAuthenticated = () => {
   return Boolean(
     localStorage.getItem("token")
   );
 };
+
+
+// ========================================
+// Logout
+// ========================================
 
 export const logout = () => {
   localStorage.removeItem("token");
