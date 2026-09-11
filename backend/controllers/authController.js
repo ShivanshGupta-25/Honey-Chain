@@ -5,6 +5,24 @@ const User = require("../models/User");
 
 
 // ========================================
+// Format User Response
+// ========================================
+
+const getUserResponse = (user) => ({
+  id: user._id,
+  name: user.name,
+  email: user.email,
+  role: user.role,
+  phone: user.phone,
+  profileImage: user.profileImage,
+  location: user.location,
+  isActive: user.isActive,
+  createdAt: user.createdAt,
+  updatedAt: user.updatedAt,
+});
+
+
+// ========================================
 // Generate JWT
 // ========================================
 
@@ -94,14 +112,7 @@ const signup = async (req, res) => {
 
       token,
 
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        phone: user.phone,
-        profileImage: user.profileImage,
-      },
+      user: getUserResponse(user),
     });
 
   } catch (error) {
@@ -176,14 +187,7 @@ const login = async (req, res) => {
 
       token,
 
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        phone: user.phone,
-        profileImage: user.profileImage,
-      },
+      user: getUserResponse(user),
     });
 
   } catch (error) {
@@ -214,16 +218,7 @@ const getMe = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        phone: user.phone,
-        profileImage: user.profileImage,
-        isActive: user.isActive,
-        createdAt: user.createdAt,
-      },
+      user: getUserResponse(user),
     });
 
   } catch (error) {
@@ -246,6 +241,7 @@ const updateProfile = async (req, res) => {
     const {
       name,
       phone,
+      location,
       profileImage,
     } = req.body;
 
@@ -258,32 +254,61 @@ const updateProfile = async (req, res) => {
       });
     }
 
+    // -------------------------------
+    // Name validation
+    // -------------------------------
+
     if (name !== undefined) {
-      user.name = name.trim();
+      const trimmedName = name.trim();
+
+      if (trimmedName.length < 2) {
+        return res.status(400).json({
+          success: false,
+          message: "Name must contain at least 2 characters",
+        });
+      }
+
+      if (trimmedName.length > 100) {
+        return res.status(400).json({
+          success: false,
+          message: "Name cannot exceed 100 characters",
+        });
+      }
+
+      user.name = trimmedName;
     }
+
+    // -------------------------------
+    // Phone
+    // -------------------------------
 
     if (phone !== undefined) {
       user.phone = phone.trim();
     }
 
+    // -------------------------------
+    // Profile image
+    // -------------------------------
+
     if (profileImage !== undefined) {
       user.profileImage = profileImage;
     }
 
+    // -------------------------------
+    // Location
+    // -------------------------------
+
+    if (location !== undefined) {
+      user.location = location;
+    }
+
+    // Save changes
     await user.save();
 
     res.status(200).json({
       success: true,
       message: "Profile updated successfully",
-
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        phone: user.phone,
-        profileImage: user.profileImage,
-      },
+      user: getUserResponse(user),
     });
 
   } catch (error) {
@@ -371,6 +396,10 @@ const changePassword = async (req, res) => {
   }
 };
 
+
+// ========================================
+// Export Controllers
+// ========================================
 
 module.exports = {
   signup,
