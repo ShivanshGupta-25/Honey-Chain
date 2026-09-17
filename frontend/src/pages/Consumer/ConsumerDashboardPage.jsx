@@ -1,24 +1,28 @@
-
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ArrowRight,
   CheckCircle2,
   ChevronRight,
-  Clock3,
   Droplets,
   History,
   ScanLine,
   ShieldCheck,
   Sparkles,
   Sprout,
-  UsersRound,
 } from "lucide-react";
 
-import ConsumerLayout from "../../components/consumer/ConsumerLayout";
 import DashboardStats from "../../components/consumer/DashboardStats";
+import ConsumerHeader from "../../components/consumer/ConsumerHeader";
+import ConsumerSidebar from "../../components/consumer/ConsumerSidebar";
 
 const ConsumerDashboardPage = () => {
   const navigate = useNavigate();
+
+  const title = "Consumer Dashboard";
+  const subtitle = "Track your honey verification activity and discover trusted sources.";
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Temporary data.
   // Replace with backend data after API integration.
@@ -51,10 +55,21 @@ const ConsumerDashboardPage = () => {
   ];
 
   return (
-    <ConsumerLayout
-      title="Dashboard"
-      subtitle="Welcome back! Explore your honey journey."
-    >
+    <div className="flex min-h-screen bg-slate-50">
+      <ConsumerSidebar
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+      />
+
+      <div className="flex min-w-0 flex-1 flex-col">
+        <ConsumerHeader
+          onMenuClick={() => setIsSidebarOpen(true)}
+          title={title}
+          subtitle={subtitle}
+        />
+
+        <main className="flex-1 p-4 sm:p-6 lg:p-8">
+    
       <div className="mx-auto w-full max-w-[1600px] space-y-6">
         {/* =========================================
             WELCOME & HERO SECTION
@@ -407,8 +422,11 @@ const ConsumerDashboardPage = () => {
             Honey Chain • Transparency, traceability, and trust.
           </p>
         </div>
+        {/* </ConsumerLayout> */}
       </div>
-    </ConsumerLayout>
+    </main>
+    </div>
+    </div>
   );
 };
 
