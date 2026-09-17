@@ -14,8 +14,11 @@ import Settings from "../pages/Beekeeper/Settings";
 import HiveDetails from "../components/beekeeper/hives/HiveDetails";
 
 // Consumer
-import ConsumerLayout from "../components/consumer/ConsumerLayout";
 import ConsumerDashboardPage from "../pages/Consumer/ConsumerDashboardPage";
+
+// Admin
+import AdminDashboardPage from "../pages/Admin/AdminDashboardPage";
+import AdminLayout from "../components/admin/AdminLayout";
 
 import ProtectedRoute from "../components/auth/ProtectedRoute";
 
@@ -54,48 +57,26 @@ const AppRoutes = () => {
           ADMIN ROUTES
       ========================================= */}
 
-      <Route
+      {/* <Route
         path="/admin/dashboard"
         element={
           <ProtectedRoute allowedRoles={["admin"]}>
-            <div className="p-10 text-2xl font-bold">
-              Admin Dashboard
-            </div>
+            <AdminDashboardPage />
           </ProtectedRoute>
         }
-      />
-
-      {/* =========================================
-          CONSUMER ROUTES
-      ========================================= */}
-
-      <Route
-        path="/verify"
-        element={
-          <ProtectedRoute allowedRoles={["consumer"]}>
-            <div className="p-10 text-2xl font-bold">
-              Consumer Verification
-            </div>
-          </ProtectedRoute>
-        }
-      />
+      /> */}
+      <Route path="/admin" element={<ProtectedRoute allowedRoles={["admin"]}>
+            <AdminLayout />
+          </ProtectedRoute>}>
+        <Route path="dashboard" element={<ProtectedRoute allowedRoles={["admin"]}>
+            <AdminDashboardPage />
+          </ProtectedRoute>} />
+      </Route>
       
       {/* =========================================
           CONSUMER ROUTES
       ========================================= */}
 
-      {/* <Route
-        path="/consumer/dashboard"
-        element={
-          <ProtectedRoute allowedRoles={["consumer"]}>
-            <ConsumerLayout title="Dashboard" subtitle="Welcome back! Explore your honey journey.">
-              <div className="p-10 text-2xl font-bold">
-                Consumer Dashboard
-              </div>
-            </ConsumerLayout>
-          </ProtectedRoute>
-        } 
-      /> */}
       <Route
         path="/consumer/dashboard"
         element={
