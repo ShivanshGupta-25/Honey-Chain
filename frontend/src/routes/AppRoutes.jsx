@@ -6,11 +6,16 @@ import Login from "../pages/Auth/Login";
 import Signup from "../pages/Auth/Signup";
 import RoleSelection from "../pages/Auth/RoleSelection";
 
+// Beekeeper
 import BeekeeperDashboard from "../pages/Beekeeper/BeekeeperDashboard";
 import Hives from "../pages/Beekeeper/Hives";
 import MyProfile from "../pages/Beekeeper/MyProfile";
 import Settings from "../pages/Beekeeper/Settings";
 import HiveDetails from "../components/beekeeper/hives/HiveDetails";
+
+// Consumer
+import ConsumerLayout from "../components/consumer/ConsumerLayout";
+import ConsumerDashboardPage from "../pages/Consumer/ConsumerDashboardPage";
 
 import ProtectedRoute from "../components/auth/ProtectedRoute";
 
@@ -71,6 +76,31 @@ const AppRoutes = () => {
             <div className="p-10 text-2xl font-bold">
               Consumer Verification
             </div>
+          </ProtectedRoute>
+        }
+      />
+      
+      {/* =========================================
+          CONSUMER ROUTES
+      ========================================= */}
+
+      {/* <Route
+        path="/consumer/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={["consumer"]}>
+            <ConsumerLayout title="Dashboard" subtitle="Welcome back! Explore your honey journey.">
+              <div className="p-10 text-2xl font-bold">
+                Consumer Dashboard
+              </div>
+            </ConsumerLayout>
+          </ProtectedRoute>
+        } 
+      /> */}
+      <Route
+        path="/consumer/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={["consumer"]}>
+            <ConsumerDashboardPage />
           </ProtectedRoute>
         }
       />
